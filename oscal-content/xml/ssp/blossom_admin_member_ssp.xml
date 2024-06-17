@@ -83,6 +83,12 @@
                 <p>Blossom network provider.</p>
             </remarks>
         </party>
+        <party uuid="b82d1c61-c52a-45aa-84a0-0e89accae375" type="person">
+            <name>John Doe</name>
+            <prop name="job-title" value="System Sec assessor" />
+            <email-address>blossom@nist.gov</email-address>
+            <member-of-organization>8aed7ffd-5158-445d-8d7c-eec5cf240cba</member-of-organization>
+        </party>
         <party uuid="09ad840f-aa79-43aa-9f22-25182c2ab11b" type="person">
             <name>Stan Owens</name>
             <prop name="job-title" value="System Owner" />
