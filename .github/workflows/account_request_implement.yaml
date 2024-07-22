@@ -13,26 +13,26 @@ jobs:
     # permissions:
     #   issues: write
     steps:
-      - name: Checkout repo to access handshake file
-        uses: actions/checkout@v4
+      # - name: Checkout repo to access handshake file
+      #   uses: actions/checkout@v4
         
-      - name: Parse issue body
-        uses: stefanbuck/github-issue-parser@v3.2.1
-        id: issue-parser
-        with:
-          template-path: ".github/ISSUE_TEMPLATE/account_management_request_form.yaml"
+      # - name: Parse issue body
+      #   uses: stefanbuck/github-issue-parser@v3.2.1
+      #   id: issue-parser
+      #   with:
+      #     template-path: ".github/ISSUE_TEMPLATE/account_management_request_form.yaml"
 
-      - name: Ensure directory exists for created users
-        run: |
-          mkdir -p ato/oscal-artifacts/created_users/
+      # - name: Ensure directory exists for created users
+      #   run: |
+      #     mkdir -p ato/oscal-artifacts/created_users/
 
-      - name: Create yaml file for automated user creation
-        env:
-          USER_NAME: "${{ steps.issue-parser.outputs.issueparser_user-first-name }} ${{ steps.issue-parser.outputs.issueparser_user-last-name }}"
-          USER_EMAIL: ${{ steps.issue-parser.outputs.issueparser_user-email }}
-          USER_ROLE: ${{ steps.issue-parser.outputs.issueparser_account-type }}
-        run: |
-          python ato/secops/create_user.py --user-name "$USER_NAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE"
+      # - name: Create yaml file for automated user creation
+      #   env:
+      #     USER_NAME: "${{ steps.issue-parser.outputs.issueparser_user-first-name }} ${{ steps.issue-parser.outputs.issueparser_user-last-name }}"
+      #     USER_EMAIL: ${{ steps.issue-parser.outputs.issueparser_user-email }}
+      #     USER_ROLE: ${{ steps.issue-parser.outputs.issueparser_account-type }}
+      #   run: |
+      #     python ato/secops/create_user.py --user-name "$USER_NAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE"
       
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@v4
@@ -41,12 +41,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
       
-      - name: Copy user yaml to bucket
+      # - name: Copy user yaml to bucket
+      #   run: |
+      #     aws s3 cp --recursive ato/oscal-artifacts/created_users/ s3://"$AWS_BUCKET"
+      #   env:
+      #     AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+      
+      - name: Delete all files in bucket
         run: |
-          aws s3 cp --recursive ato/oscal-artifacts/created_users/ s3://"$AWS_BUCKET"
+          aws s3 rm --recursive s3://"$AWS_BUCKET"
         env:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
-        
+
       # - name: Notify Blossom Assessors about Implemented Account
       #   run: gh issue comment "$NUMBER" --body "$BODY"
       #   env:
