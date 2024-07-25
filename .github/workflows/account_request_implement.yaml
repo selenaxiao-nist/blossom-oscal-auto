@@ -13,7 +13,7 @@ jobs:
     # permissions:
     #   issues: write
     steps:
-      - name: Checkout repo to access handshake file
+      - name: Checkout repo
         uses: actions/checkout@v4
         
       - name: Parse issue body
@@ -25,27 +25,46 @@ jobs:
       - name: Ensure directory exists for created users
         run: |
           mkdir -p ato/oscal-artifacts/created_users/
+      
+      - name: Ensure directory exists for created users references
+        run: |
+          mkdir -p ato/oscal-artifacts/reference_created_users/
+
 
       - name: Create yaml file for automated user creation
         env:
           USER_NAME: "${{ steps.issue-parser.outputs.issueparser_user-first-name }} ${{ steps.issue-parser.outputs.issueparser_user-last-name }}"
           USER_EMAIL: ${{ steps.issue-parser.outputs.issueparser_user-email }}
           USER_ROLE: ${{ steps.issue-parser.outputs.issueparser_account-type }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          python ato/secops/create_user.py --user-name "$USER_NAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE"
-      
-      - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-      
-      - name: Copy user yaml to bucket
+          python ato/secops/create_user.py --user-name "$USER_NAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER"
+
+      - name: Store user yaml in repo
         run: |
-          aws s3 cp --recursive ato/oscal-artifacts/created_users/ s3://"$AWS_BUCKET"
+          git config --global user.name "create-user-action"
+          git config --global user.email "<>"
+          git checkout -b "$BRANCH_NAME"
+          git add "ato/oscal-artifacts/created_users/*"
+          git add "ato/oscal-artifacts/reference_created_users/*"
+          git commit -m "Create user request $ISSUE_NUMBER"
+          git push origin "$BRANCH_NAME"
         env:
-          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          BRANCH_NAME: "account-request-${{ github.event.issue.number }}"
+  
+      # - name: Configure AWS CLI
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-region: ${{ secrets.AWS_REGION }}
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+      
+      # - name: Copy reference yaml to bucket
+      #   run: |
+      #     aws s3 cp --recursive ato/oscal-artifacts/reference_created_users/ s3://"$AWS_BUCKET"
+      #   env:
+      #     AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
       
       # - name: Delete all files in bucket
       #   run: |
