@@ -46,6 +46,7 @@ def create_user(user_name, user_email, user_role, location_uuid, org_member, iss
     reference = {
         "file": f"{filename}",
         "issue_number": f"{issue_number}",
+        "branch_name": f"account-request-{issue_number}"
     }
     
     # Write to user reference yaml file (sent to S3)

@@ -47,7 +47,7 @@ jobs:
           git checkout -b "$BRANCH_NAME"
           git add "ato/oscal-artifacts/created_users/*"
           git add "ato/oscal-artifacts/reference_created_users/*"
-          git commit -m "Create user request $ISSUE_NUMBER"
+          git commit -m "Create user request #$ISSUE_NUMBER"
           git push origin "$BRANCH_NAME"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
