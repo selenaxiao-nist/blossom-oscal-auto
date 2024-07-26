@@ -28,14 +28,14 @@ jobs:
     needs: request-approved
     runs-on: ubuntu-20.04
     steps:        
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Parse issue body
         uses: stefanbuck/github-issue-parser@v3.2.1
         id: issue-parser
         with:
           template-path: ".github/ISSUE_TEMPLATE/account_management_request_form.yaml"
-
-      - name: Checkout repo
-        uses: actions/checkout@v4
 
       - name: Ensure directory exists for created users
         run: |
