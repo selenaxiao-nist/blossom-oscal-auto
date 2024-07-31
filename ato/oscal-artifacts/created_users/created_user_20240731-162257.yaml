@@ -1,0 +1,11 @@
+
+
+command: create-acl-user|create-cognito-user
+user:
+  email-address: johndoe@email
+  location-uuid: None
+  member-of-organization: None
+  name: John Doe
+  role: Technical Point of Contact
+  username: johndoe
+
