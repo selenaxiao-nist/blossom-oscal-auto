@@ -1,0 +1,11 @@
+
+
+command: create-user
+user:
+  email-address: blossom@nist.gov
+  location-uuid: None
+  member-of-organization: None
+  name: Tom Pock
+  role: Technical Point of Contact
+  username: tompock
+
