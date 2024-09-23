@@ -44,7 +44,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Parse issue body
-        uses: stefanbuck/github-issue-parser@v3.2.1
+        uses: stefanbuck/github-issue-parser@2d2ff50d4aae06ab58d26bf59468d98086605f11 # v3.2.1
         id: issue-parser
         with:
           template-path: ".github/ISSUE_TEMPLATE/account_management_request_form.yaml"
@@ -89,7 +89,7 @@ jobs:
           BRANCH_NAME: "account-request-${{ github.event.issue.number }}"
   
       - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
