@@ -26,7 +26,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
     
     # Structure of yaml file
     cmd = {
-    "command" : "create-acl-user|create-cognito-user",
+    "command" : "create-user",
     "user" : {
         "name" : f"{user_name}",
         "username" : f"{user_username}",
@@ -41,7 +41,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     
     # Write to user yaml file (stored in repo)
-    filename = "ato/oscal-artifacts/created_users/created_user_" + timestamp + ".yaml"
+    filename = "ato/oscal-artifacts/created_users/" + timestamp + "_created_user.yaml"
     with open(filename, 'w') as f:
         print(f"\n\n{yaml.safe_dump(cmd, default_flow_style=False)}", file=f)
         
@@ -53,7 +53,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
     }
     
     # Write to user reference yaml file (sent to S3)
-    filename_reference = "ato/oscal-artifacts/reference_created_users/reference_created_user_" + timestamp + ".yaml"
+    filename_reference = "ato/oscal-artifacts/reference_created_users/" + timestamp + "_reference_user.yaml"
     with open(filename_reference, 'w') as f:
         print(f"\n\n{yaml.safe_dump(reference, default_flow_style=False)}", file=f)
 
