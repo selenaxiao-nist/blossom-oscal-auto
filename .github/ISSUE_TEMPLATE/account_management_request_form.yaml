@@ -66,6 +66,7 @@ body:
         - System Sec Assessor
         - System Administrator
         - Technical Point of Contact
+        - Acquisition Officer
       multiple: false
     validations:
       required: true
