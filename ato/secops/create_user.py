@@ -10,7 +10,8 @@ from datetime import datetime
 @click.option('--location-uuid', help='UUID of physical location of user')
 @click.option('--org-member', help='UUID of organization that user is member of')
 @click.option('--issue-number', help='Issue number of user account request')
-def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number):
+@click.option('--ssp-path', help='File path of SSP to update')
+def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path):
     """
     Creates a yaml file containing information about a new user
 
@@ -22,6 +23,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         location_uuid (string): String containing UUID of physical location of user
         org_member (string): String containing UUID of organization that user is member of
         issue_number (string): String containing issue number of user account request
+        ssp_path (string): String containing file path of SSP to update
     """
     
     # Structure of yaml file
@@ -34,6 +36,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         "role":f"{user_role}",
         "location-uuid":f"{location_uuid}",
         "member-of-organization":f"{org_member}",
+        "ssp-path": f"{ssp_path}",
         },
     }
     

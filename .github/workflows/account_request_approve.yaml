@@ -35,6 +35,7 @@ jobs:
       user-username: ${{ steps.issue-parser.outputs.issueparser_user-username }}
       user-email: ${{ steps.issue-parser.outputs.issueparser_user-email }}
       account-type: ${{ steps.issue-parser.outputs.issueparser_account-type }}
+      ssp-file-path: ${{ steps.issue-parser.outputs.issueparser_ssp-file-path }}
     steps:        
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -72,8 +73,9 @@ jobs:
           USER_EMAIL: ${{ needs.parse-issue.outputs.user-email }}
           USER_ROLE: ${{ needs.parse-issue.outputs.account-type }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          SSP_FILE_PATH: ${{ needs.parse-issue.outputs.ssp-file-path }}
         run: |
-          python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER"
+          python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH"
 
       - name: Store user yaml in repo
         run: |
@@ -86,7 +88,7 @@ jobs:
           git push origin "$BRANCH_NAME"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          BRANCH_NAME: "account-request-${{ github.event.issue.number }}"
+          BRANCH_NAME: "account-request"
   
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4

@@ -106,6 +106,14 @@ body:
       multiple: false
     validations:
       required: true
+  - type: input
+    id: ssp-file-path
+    attributes:
+      label: File path of SSP
+      description: Type in the file path of the SSP to update
+      placeholder: .sims/
+    validations:
+      required: true
   - type: checkboxes
     id: attestation
     attributes:
