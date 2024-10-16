@@ -179,6 +179,7 @@
             <location-uuid>1ef39fd9-d184-44c4-8ef4-36d2dbad70a2</location-uuid>
             <member-of-organization>8aed7ffd-5158-445d-8d7c-eec5cf240cba</member-of-organization>
         </party>
+        <?After-Party-Marker?>
         <!-- ###
              Entities with access to the infrastructure
         ### -->
@@ -241,6 +242,7 @@
         <responsible-party role-id="authorizing-official">
             <party-uuid>3360e343-9860-4bda-9dfc-ff427c3dfab6</party-uuid>
         </responsible-party>
+        <?After-Resp-Party-Marker?>
         <remarks>
             <p>This SSP was created using a simplified version of OSCAL-based FedRAMP SSP Template
                 for the FedRAMP Low, Moderate, and High baselines.</p>
