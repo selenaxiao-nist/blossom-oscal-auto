@@ -1,0 +1,12 @@
+
+
+command: create-user
+user:
+  email-address: blossom@nist.gov
+  location-uuid: None
+  member-of-organization: None
+  name: AcquiaTwo Officiale
+  role: Acquisition Officer
+  ssp-path: .sims/
+  username: acquiatwoofficiale
+
