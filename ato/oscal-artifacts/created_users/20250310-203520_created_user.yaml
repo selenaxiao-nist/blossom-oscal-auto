@@ -2,7 +2,7 @@
 
 command: create-user
 user:
-  email-address: blossom-admin@nist.gov
+  email-address: blossom-admin+1@nist.gov
   location-uuid: None
   member-of-organization: None
   name: SimmonTwo Admino
