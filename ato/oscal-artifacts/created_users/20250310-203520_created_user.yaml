@@ -2,10 +2,10 @@
 
 command: create-user
 user:
-  email-address: blossom-admin+1@nist.gov
+  email-address: blossom-admin+2@nist.gov
   location-uuid: None
   member-of-organization: None
-  name: SimmonTwo Admino
+  name: Sim T Adminio
   role: System Administrator
   ssp-path: .sims/
   username: SAdmin
