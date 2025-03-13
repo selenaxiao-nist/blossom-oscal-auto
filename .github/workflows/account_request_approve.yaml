@@ -74,8 +74,14 @@ jobs:
           USER_ROLE: ${{ needs.parse-issue.outputs.account-type }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           SSP_FILE_PATH: ${{ needs.parse-issue.outputs.ssp-file-path }}
+          INITIATOR: ${{ github.event.issue.user.login }} # GitHub user that created this request
+          APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
         run: |
-          python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH"
+          python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
+          --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
+          --initiator "$INITIATOR" --approver "$APPROVER"
+          cat ato/oscal-artifacts/created_users/*
+          cat ato/oscal-artifacts/reference_created_users/*
 
       - name: Store user yaml in repo
         run: |

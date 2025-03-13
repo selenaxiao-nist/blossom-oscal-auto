@@ -11,7 +11,9 @@ from datetime import datetime
 @click.option('--org-member', help='UUID of organization that user is member of')
 @click.option('--issue-number', help='Issue number of user account request')
 @click.option('--ssp-path', help='File path of SSP to update')
-def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path):
+@click.option('--initiator', help='Username of GitHub user that created account request')
+@click.option('--approver', help='Username of GitHub user that approved account request')
+def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path, initiator, approver):
     """
     Creates a yaml file containing information about a new user
 
@@ -24,6 +26,8 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         org_member (string): String containing UUID of organization that user is member of
         issue_number (string): String containing issue number of user account request
         ssp_path (string): String containing file path of SSP to update
+        initiator (string): String containing username of GitHub user that created account request
+        approver (string): String containing username of GitHub user that approved account request
     """
     
     # Structure of yaml file
@@ -37,6 +41,8 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         "location-uuid":f"{location_uuid}",
         "member-of-organization":f"{org_member}",
         "ssp-path": f"{ssp_path}",
+        "initiator": f"{initiator}",
+        "approver": f"{approver}",
         },
     }
     
