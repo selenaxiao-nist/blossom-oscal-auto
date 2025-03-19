@@ -60,11 +60,11 @@ jobs:
 
       - name: Ensure directory exists for created users
         run: |
-          mkdir -p ato/oscal-artifacts/created_users/
+          mkdir -p ato/secops/created_users/
       
       - name: Ensure directory exists for created users references
         run: |
-          mkdir -p ato/oscal-artifacts/reference_created_users/
+          mkdir -p ato/secops/reference_created_users/
 
       - name: Create yaml file for automated user creation
         env:
@@ -80,8 +80,8 @@ jobs:
           python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
           --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
           --requester "$REQUESTER" --approver "$APPROVER"
-          cat ato/oscal-artifacts/created_users/*
-          cat ato/oscal-artifacts/reference_created_users/*
+          cat ato/secops/created_users/*
+          cat ato/secops/reference_created_users/*
 
       - name: Store user yaml in repo
         run: |
@@ -91,8 +91,8 @@ jobs:
           git fetch --all
           git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
           git pull origin "$BRANCH_NAME"
-          git add "ato/oscal-artifacts/created_users/*"
-          git add "ato/oscal-artifacts/reference_created_users/*"
+          git add "ato/secops/created_users/*"
+          git add "ato/secops/reference_created_users/*"
           git commit -m "Create user request #$ISSUE_NUMBER"
           git push origin "$BRANCH_NAME"
         env:
@@ -108,7 +108,7 @@ jobs:
       
       - name: Copy reference yaml to bucket
         run: |
-          aws s3 cp --recursive ato/oscal-artifacts/reference_created_users/ s3://"$AWS_BUCKET"
+          aws s3 cp --recursive ato/secops/reference_created_users/ s3://"$AWS_BUCKET"
         env:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
 
@@ -122,11 +122,11 @@ jobs:
 
       - name: Ensure directory exists for deleted users
         run: |
-          mkdir -p ato/oscal-artifacts/deleted_users/
+          mkdir -p ato/secops/deleted_users/
       
       - name: Ensure directory exists for deleted users references
         run: |
-          mkdir -p ato/oscal-artifacts/reference_deleted_users/
+          mkdir -p ato/secops/reference_deleted_users/
 
       - name: Create yaml file for automated user deletion
         env:
@@ -139,8 +139,8 @@ jobs:
           python ato/secops/delete_user.py --user-username "$USER_USERNAME" \
           --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
           --requester "$REQUESTER" --approver "$APPROVER"
-          cat ato/oscal-artifacts/deleted_users/*
-          cat ato/oscal-artifacts/reference_deleted_users/*
+          cat ato/secops/deleted_users/*
+          cat ato/secops/reference_deleted_users/*
 
       - name: Store user yaml in repo
         run: |
@@ -150,8 +150,8 @@ jobs:
           git fetch --all
           git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
           git pull origin "$BRANCH_NAME"
-          git add "ato/oscal-artifacts/deleted_users/*"
-          git add "ato/oscal-artifacts/reference_deleted_users/*"
+          git add "ato/secops/deleted_users/*"
+          git add "ato/secops/reference_deleted_users/*"
           git commit -m "Delete user request #$ISSUE_NUMBER"
           git push origin "$BRANCH_NAME"
         env:
@@ -167,6 +167,6 @@ jobs:
       
       - name: Copy reference yaml to bucket
         run: |
-          aws s3 cp --recursive ato/oscal-artifacts/reference_deleted_users/ s3://"$AWS_BUCKET"
+          aws s3 cp --recursive ato/secops/reference_deleted_users/ s3://"$AWS_BUCKET"
         env:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
