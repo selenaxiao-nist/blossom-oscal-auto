@@ -105,11 +105,17 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Get filename of reference yaml to upload
+        id: get-filename
+        run: |
+          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ato/secops/reference")" >> $GITHUB_OUTPUT
       
       - name: Copy reference yaml to bucket
         run: |
-          aws s3 cp --recursive ato/secops/reference_created_users/ s3://"$AWS_BUCKET"
+          aws s3 cp "$REFERENCE_YAML" s3://"$AWS_BUCKET"
         env:
+          REFERENCE_YAML: ${{ steps.get-filename.outputs.reference-yaml }}
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
 
   delete-user:
@@ -165,8 +171,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
       
+      - name: Get filename of reference yaml to upload
+        id: get-filename
+        run: |
+          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ato/secops/reference")" >> $GITHUB_OUTPUT
+      
       - name: Copy reference yaml to bucket
         run: |
-          aws s3 cp --recursive ato/secops/reference_deleted_users/ s3://"$AWS_BUCKET"
+          aws s3 cp "$REFERENCE_YAML" s3://"$AWS_BUCKET"
         env:
+          REFERENCE_YAML: ${{ steps.get-filename.outputs.reference-yaml }}
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
