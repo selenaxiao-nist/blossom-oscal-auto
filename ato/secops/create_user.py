@@ -13,7 +13,8 @@ from datetime import datetime
 @click.option('--ssp-path', help='File path of SSP to update')
 @click.option('--requester', help='Username of GitHub user that created account creation request')
 @click.option('--approver', help='Username of GitHub user that approved account creation request')
-def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path, requester, approver):
+@click.option('--session-id', help='Session ID')
+def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path, requester, approver, session_id):
     """
     Creates a yaml file containing information about a new user
 
@@ -28,6 +29,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         ssp_path (string): String containing file path of SSP to update
         requester (string): String containing username of GitHub user that created account creation request
         approver (string): String containing username of GitHub user that approved account creation request
+        session_id (string): String containing session ID
     """
     
     # Structure of yaml file
@@ -58,7 +60,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
     reference = {
         "file": f"{filename}",
         "issue_number": f"{issue_number}",
-        "branch_name": f"account-request"
+        "branch_name": f"{session_id}"
     }
     
     # Write to user reference yaml file (sent to S3)
