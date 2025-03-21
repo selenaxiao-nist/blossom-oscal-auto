@@ -1,0 +1,9 @@
+
+
+command: delete-user
+user:
+  approver: selenaxiao-nist
+  requester: selenaxiao-nist
+  ssp-path: .sims/
+  username: steveasesorodelete
+
