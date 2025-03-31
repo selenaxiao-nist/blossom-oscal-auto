@@ -66,6 +66,11 @@ jobs:
         run: |
           mkdir -p ato/secops/reference_created_users/
 
+      - name: Get most recent session ID
+        id: get-session-id
+        run: |
+          echo "session-id=$(cat .sims/session.lock)" >> $GITHUB_OUTPUT
+
       - name: Create yaml file for automated user creation
         env:
           USER_NAME: "${{ needs.parse-issue.outputs.user-first-name }} ${{ needs.parse-issue.outputs.user-last-name }}"
@@ -76,10 +81,11 @@ jobs:
           SSP_FILE_PATH: ${{ needs.parse-issue.outputs.ssp-file-path }}
           REQUESTER: ${{ github.event.issue.user.login }} # GitHub user that created this request
           APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
+          SESSION_ID: ${{ steps.get-session-id.outputs.session-id }}
         run: |
           python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
           --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
-          --requester "$REQUESTER" --approver "$APPROVER"
+          --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID"
           cat ato/secops/created_users/*
           cat ato/secops/reference_created_users/*
 
@@ -89,15 +95,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config pull.rebase false
           git fetch --all
-          git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
-          git pull origin "$BRANCH_NAME"
+          (git checkout "$BRANCH_NAME" && git pull origin "$BRANCH_NAME") || git checkout -b "$BRANCH_NAME"
           git add "ato/secops/created_users/*"
           git add "ato/secops/reference_created_users/*"
           git commit -m "Create user request #$ISSUE_NUMBER"
-          git push origin "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME" || git push -u origin "$BRANCH_NAME"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          BRANCH_NAME: "account-request"
+          BRANCH_NAME: ${{ steps.get-session-id.outputs.session-id }}
   
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4
@@ -134,6 +139,11 @@ jobs:
         run: |
           mkdir -p ato/secops/reference_deleted_users/
 
+      - name: Get most recent session ID
+        id: get-session-id
+        run: |
+          echo "session-id=$(cat .sims/session.lock)" >> $GITHUB_OUTPUT
+
       - name: Create yaml file for automated user deletion
         env:
           USER_USERNAME: ${{ needs.parse-issue.outputs.user-username }}
@@ -141,10 +151,11 @@ jobs:
           SSP_FILE_PATH: ${{ needs.parse-issue.outputs.ssp-file-path }}
           REQUESTER: ${{ github.event.issue.user.login }} # GitHub user that created this request
           APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
+          SESSION_ID: ${{ steps.get-session-id.outputs.session-id }}
         run: |
           python ato/secops/delete_user.py --user-username "$USER_USERNAME" \
           --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
-          --requester "$REQUESTER" --approver "$APPROVER"
+          --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID"
           cat ato/secops/deleted_users/*
           cat ato/secops/reference_deleted_users/*
 
@@ -154,15 +165,15 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config pull.rebase false
           git fetch --all
-          git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
+          (git checkout "$BRANCH_NAME" && git pull origin "$BRANCH_NAME") || git checkout -b "$BRANCH_NAME"
           git pull origin "$BRANCH_NAME"
           git add "ato/secops/deleted_users/*"
           git add "ato/secops/reference_deleted_users/*"
           git commit -m "Delete user request #$ISSUE_NUMBER"
-          git push origin "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME" || git push -u origin "$BRANCH_NAME"
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          BRANCH_NAME: "account-request"
+          BRANCH_NAME: ${{ steps.get-session-id.outputs.session-id }}
   
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4
