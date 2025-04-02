@@ -7,32 +7,18 @@ jobs:
   create-session:
     runs-on: ubuntu-20.04
     steps:
-      - name: Get timestamp
-        id: get-timestamp
-        run: |
-          echo "timestamp=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            .sims
-
-      - name: Update session.lock
+            ato/secops/create_session.sh
+          sparse-checkout-cone-mode: false
+      
+      - name: Create session
         run: |
-          git config user.name "create-session-action[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config pull.rebase false
-          git fetch --all
-          git checkout main
-          git pull origin main
-          echo $SESSION_ID >| .sims/session.lock
-          git add .sims/session.lock
-          git commit -m "New session $SESSION_ID"
-          git push origin main
-          echo $SESSION_ID
-        env:
-          SESSION_ID: "s-${{ steps.get-timestamp.outputs.timestamp }}"
+          bash ato/secops/create_session.sh
+
+   
 
 
       
