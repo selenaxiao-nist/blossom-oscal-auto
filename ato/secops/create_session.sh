@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SESSION_ID=$(date +'%Y%m%d-%H%M%S')
+SESSION_ID="s-$(date +'%Y%m%d-%H%M%S')"
 
 git config user.name "create-session-action[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
