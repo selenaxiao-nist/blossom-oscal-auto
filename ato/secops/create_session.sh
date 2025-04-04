@@ -9,7 +9,7 @@ git fetch --all
 git checkout main
 git pull origin main
 
-echo $SESSION_ID >| .sims/session.lock
+echo "s-$SESSION_ID" >| .sims/session.lock
 
 git add .sims/session.lock
 git commit -m "New session $SESSION_ID"
