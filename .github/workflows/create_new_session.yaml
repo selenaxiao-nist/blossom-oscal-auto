@@ -17,8 +17,3 @@ jobs:
       - name: Create session
         run: |
           bash ato/secops/create_session.sh
-
-   
-
-
-      
