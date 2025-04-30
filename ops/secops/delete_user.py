@@ -37,7 +37,7 @@ def delete_user(user_username, issue_number, ssp_path, requester, approver, sess
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     
     # Write to user yaml file (stored in repo)
-    filename = "ato/secops/deleted_users/" + timestamp + "_deleted_user.yaml"
+    filename = "ops/secops/deleted_users/" + timestamp + "_deleted_user.yaml"
     with open(filename, 'w') as f:
         print(f"\n\n{yaml.safe_dump(cmd, default_flow_style=False)}", file=f)
         
@@ -49,7 +49,7 @@ def delete_user(user_username, issue_number, ssp_path, requester, approver, sess
     }
     
     # Write to user reference yaml file (sent to S3)
-    filename_reference = "ato/secops/reference_deleted_users/" + timestamp + "_reference_user.yaml"
+    filename_reference = "ops/secops/reference_deleted_users/" + timestamp + "_reference_user.yaml"
     with open(filename_reference, 'w') as f:
         print(f"\n\n{yaml.safe_dump(reference, default_flow_style=False)}", file=f)
 

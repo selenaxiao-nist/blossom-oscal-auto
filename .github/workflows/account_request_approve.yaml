@@ -60,16 +60,16 @@ jobs:
 
       - name: Ensure directory exists for created users
         run: |
-          mkdir -p ato/secops/created_users/
+          mkdir -p ops/secops/created_users/
       
       - name: Ensure directory exists for created users references
         run: |
-          mkdir -p ato/secops/reference_created_users/
+          mkdir -p ops/secops/reference_created_users/
 
       - name: Create session ID if it doesn't already exist
         if: ${{ hashFiles('.sims/session.lock') == '' }}
         run: |
-          bash ato/secops/create_session.sh
+          bash ops/secops/create_session.sh
 
       - name: Get most recent session ID
         id: get-session-id
@@ -88,11 +88,11 @@ jobs:
           APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
           SESSION_ID: ${{ steps.get-session-id.outputs.session-id }}
         run: |
-          python ato/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
+          python ops/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
           --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
           --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID"
-          cat ato/secops/created_users/*
-          cat ato/secops/reference_created_users/*
+          cat ops/secops/created_users/*
+          cat ops/secops/reference_created_users/*
 
       - name: Store user yaml in repo
         run: |
@@ -101,8 +101,8 @@ jobs:
           git config pull.rebase false
           git fetch --all
           (git checkout "$BRANCH_NAME" && git pull origin "$BRANCH_NAME") || git checkout -b "$BRANCH_NAME"
-          git add "ato/secops/created_users/*"
-          git add "ato/secops/reference_created_users/*"
+          git add "ops/secops/created_users/*"
+          git add "ops/secops/reference_created_users/*"
           git commit -m "Create user request #$ISSUE_NUMBER"
           git push origin "$BRANCH_NAME" || git push -u origin "$BRANCH_NAME"
         env:
@@ -119,7 +119,7 @@ jobs:
       - name: Get filename of reference yaml to upload
         id: get-filename
         run: |
-          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ato/secops/reference")" >> $GITHUB_OUTPUT
+          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ops/secops/reference")" >> $GITHUB_OUTPUT
       
       - name: Copy reference yaml to bucket
         run: |
@@ -138,11 +138,11 @@ jobs:
 
       - name: Ensure directory exists for deleted users
         run: |
-          mkdir -p ato/secops/deleted_users/
+          mkdir -p ops/secops/deleted_users/
       
       - name: Ensure directory exists for deleted users references
         run: |
-          mkdir -p ato/secops/reference_deleted_users/
+          mkdir -p ops/secops/reference_deleted_users/
 
       - name: Get most recent session ID
         id: get-session-id
@@ -158,11 +158,11 @@ jobs:
           APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
           SESSION_ID: ${{ steps.get-session-id.outputs.session-id }}
         run: |
-          python ato/secops/delete_user.py --user-username "$USER_USERNAME" \
+          python ops/secops/delete_user.py --user-username "$USER_USERNAME" \
           --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
           --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID"
-          cat ato/secops/deleted_users/*
-          cat ato/secops/reference_deleted_users/*
+          cat ops/secops/deleted_users/*
+          cat ops/secops/reference_deleted_users/*
 
       - name: Store user yaml in repo
         run: |
@@ -172,8 +172,8 @@ jobs:
           git fetch --all
           (git checkout "$BRANCH_NAME" && git pull origin "$BRANCH_NAME") || git checkout -b "$BRANCH_NAME"
           git pull origin "$BRANCH_NAME"
-          git add "ato/secops/deleted_users/*"
-          git add "ato/secops/reference_deleted_users/*"
+          git add "ops/secops/deleted_users/*"
+          git add "ops/secops/reference_deleted_users/*"
           git commit -m "Delete user request #$ISSUE_NUMBER"
           git push origin "$BRANCH_NAME" || git push -u origin "$BRANCH_NAME"
         env:
@@ -190,7 +190,7 @@ jobs:
       - name: Get filename of reference yaml to upload
         id: get-filename
         run: |
-          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ato/secops/reference")" >> $GITHUB_OUTPUT
+          echo "reference-yaml=$(git diff --name-only HEAD HEAD~1 | grep "ops/secops/reference")" >> $GITHUB_OUTPUT
       
       - name: Copy reference yaml to bucket
         run: |

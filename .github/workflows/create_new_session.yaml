@@ -11,9 +11,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            ato/secops
+            ops/secops
             .sims
       
       - name: Create session
         run: |
-          bash ato/secops/create_session.sh
+          bash ops/secops/create_session.sh
