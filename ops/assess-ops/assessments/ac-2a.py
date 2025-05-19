@@ -1,19 +1,18 @@
 # ac-2a - parse SSP and determine whether privileged and non-privileged roles are documented
 
 from lxml import etree
+from ..constants import NAMESPACES, SSP_FILE
 
 # user_type = 'privileged' # privileged or non-privileged
 # query = f"//xmlns:role[xmlns:prop[@name='privilege-level' and @value='{user_type}']]/@id"
 query_privileged = f"//xmlns:role[xmlns:prop[@name='privilege-level' and @value='privileged']]/@id"
 query_nonprivileged = f"//xmlns:role[xmlns:prop[@name='privilege-level' and @value='non-privileged']]/@id"
 
-ssp_file=''
-tree = etree.parse(ssp_file)
+tree = etree.parse(SSP_FILE)
 root = tree.getroot()
 
-namespaces = {'xmlns': 'http://csrc.nist.gov/ns/oscal/1.0'}
-get_privileged_roles = root.xpath(query_privileged, namespaces=namespaces)
-get_nonprivileged_roles = root.xpath(query_nonprivileged, namespaces=namespaces)
+get_privileged_roles = root.xpath(query_privileged, namespaces=NAMESPACES)
+get_nonprivileged_roles = root.xpath(query_nonprivileged, namespaces=NAMESPACES)
 # print(user_type)
 print(f"{get_privileged_roles=}")
 print(f"{get_nonprivileged_roles=}")
