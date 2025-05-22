@@ -1,7 +1,8 @@
 # ac-2d - parse users in ACL and match with SSP
 
-from utils import run_ssp_expr, run_acl_expr, get_ssp_statement_description, get_sap_task_description
+from utils import *
 from pprint import pprint
+from constants import ROLES
 
 print("SSP description:\n")
 print(get_ssp_statement_description("d.1") + "\n")
@@ -10,28 +11,43 @@ print(get_sap_task_description("d.1") + "\n")
 
 expr = f"//aws:Grantee[aws:ID and aws:DisplayName]" # Get Grantee (user) elements that contain ID (UUID) and DisplayName (role). Some Grantee elements aren't users.
 
-get_users_acl = run_acl_expr(expr)
+get_acl_users = run_acl_expr(expr)
 
-users_acl_result = {}
-for user in get_users_acl:
+acl_users_result = {}
+for user in get_acl_users:
     uuid = run_acl_expr('aws:ID/text()', user)[0]
     role = run_acl_expr('aws:DisplayName/text()', user)[0]
 
-    if uuid not in users_acl_result:
-        users_acl_result[uuid] = {'uuid': uuid, 'role':role}
+    if uuid not in acl_users_result:
+        acl_users_result[uuid] = {'uuid': uuid, 'role':role}
 
-users_acl_list = list(users_acl_result.values())
+acl_users_list = list(acl_users_result.values())
+# pprint(f"{users_acl_list=}")
+acl_users_dict = {}
+for user in acl_users_list:
+    uuid = user['uuid']
+    role = user['role']
+    acl_users_dict[uuid] = role
+pprint(f"{acl_users_dict=}")
 
-pprint(f"{users_acl_list=}")
 # for user in users_acl_list:
 #     pprint(user)
 
-roles = ["system-owner"]
-
 # Match with SSP
-expr = f"//oscal:responsible-party[@role-id='system-owner']/oscal:party-uuid/text()"
-ssp_system_owners = run_ssp_expr(expr)
-pprint(f"{ssp_system_owners=}")
-
 # 1. read ssp responsible parties for users, then check those users exist in ACL (contains only users in the cloud), Cognito, chaincode (acquisition officer, authorizing official, license owner)
+
+for role in ROLES:
+    expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
+    ssp_users = run_ssp_expr(expr)
+    print(role + ": ")
+    pprint(f"{ssp_users=}")
+
+    result = "Pass, " + role + " users in ACL are defined as " + role + " users in SSP" 
+    for ssp_system_owner_uuid in ssp_users:
+        check_acl = acl_users_dict[ssp_system_owner_uuid]
+        if check_acl != role:
+            print("User " + ssp_system_owner_uuid + " does not match in ACL (" + check_acl + ") and SSP (" + role + ")")
+            result = "Fail, users in ACL don't match the SSP."
+
+    print("Result: " + result)
 
