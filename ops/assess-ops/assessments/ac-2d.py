@@ -4,6 +4,8 @@ from utils import *
 from pprint import pprint
 from constants import ROLES
 
+print_current_control(__file__)
+
 print("SSP description:\n")
 print(get_ssp_statement_description("d.1") + "\n")
 print("SAP description:\n")

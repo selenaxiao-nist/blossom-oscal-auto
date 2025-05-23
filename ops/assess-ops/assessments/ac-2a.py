@@ -1,6 +1,8 @@
 # ac-2a - parse SSP and determine whether privileged and non-privileged roles are documented
 
-from utils import run_ssp_expr, get_ssp_statement_description, get_sap_task_description
+from utils import *
+
+print_current_control(__file__)
 
 # user_type = 'privileged' # privileged or non-privileged
 # expr = f"//oscal:role[oscal:prop[@name='privilege-level' and @value='{user_type}']]/@id"

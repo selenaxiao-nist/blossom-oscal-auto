@@ -1,6 +1,8 @@
 # ac-2b - account managers are assigned
 
-from utils import run_ssp_expr, get_ssp_statement_description, get_sap_task_description
+from utils import *
+
+print_current_control(__file__)
 
 # get uuids listed in system-owner responsible party = account managers are assigned (SSP defines system owners as account managers)
 expr = f"//oscal:responsible-party[@role-id='system-owner']/oscal:party-uuid/text()"

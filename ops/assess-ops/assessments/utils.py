@@ -1,6 +1,7 @@
 import sys
 from lxml import etree
 from constants import *
+import os.path
 
 def check_file_path(file_path: str) -> bool:
     if len(file_path) == 0:
@@ -46,3 +47,7 @@ def get_sap_task_description(statement_id: str) -> str:
     for i in get_sap_description:
         sap_description += (i + " ")
     return sap_description
+
+def print_current_control(filename: str):
+    control = os.path.splitext(os.path.basename(filename))[0]
+    print(control + " assessment: \n")
