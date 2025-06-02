@@ -38,6 +38,10 @@ pprint(f"{acl_users_dict=}")
 # Match with SSP
 # 1. read ssp responsible parties for users, then check those users exist in ACL (contains only users in the cloud), Cognito, chaincode (acquisition officer, authorizing official, license owner)
 
+# ac-2.d.1 - match users
+expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
+
+# ac-2.d.2 - match roles
 for role in ROLES:
     expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
     ssp_users = run_ssp_expr(expr)
@@ -52,4 +56,6 @@ for role in ROLES:
             result = "Fail, users in ACL don't match the SSP."
 
     print("Result: " + result)
+
+# ac-2.d.3 - match privileges
 
