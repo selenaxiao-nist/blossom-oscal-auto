@@ -36,6 +36,7 @@ jobs:
       user-email: ${{ steps.issue-parser.outputs.issueparser_user-email }}
       account-type: ${{ steps.issue-parser.outputs.issueparser_account-type }}
       ssp-file-path: ${{ steps.issue-parser.outputs.issueparser_ssp-file-path }}
+      amb-member: ${{ steps.issue-parser.outputs.issueparser_amb-member }}
     steps:        
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -87,10 +88,11 @@ jobs:
           REQUESTER: ${{ github.event.issue.user.login }} # GitHub user that created this request
           APPROVER: ${{ github.event.sender.login }} # GitHub user that approved this request
           SESSION_ID: ${{ steps.get-session-id.outputs.session-id }}
+          AMB_MEMBER: ${{ needs.parse-issue.outputs.amb-member }}
         run: |
           python ops/secops/create_user.py --user-name "$USER_NAME" --user-username "$USER_USERNAME" \
           --user-email "$USER_EMAIL" --user-role "$USER_ROLE" --issue-number "$ISSUE_NUMBER" --ssp-path "$SSP_FILE_PATH" \
-          --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID"
+          --requester "$REQUESTER" --approver "$APPROVER" --session-id "$SESSION_ID" --amb-member "$AMB_MEMBER"
           cat ops/secops/created_users/*
           cat ops/secops/reference_created_users/*
 

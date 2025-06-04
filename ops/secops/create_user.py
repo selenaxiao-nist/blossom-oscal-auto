@@ -14,7 +14,8 @@ from datetime import datetime
 @click.option('--requester', help='Username of GitHub user that created account creation request')
 @click.option('--approver', help='Username of GitHub user that approved account creation request')
 @click.option('--session-id', help='Session ID')
-def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path, requester, approver, session_id):
+@click.option('--amb-member', help='Which AMB member')
+def create_user(user_name, user_username, user_email, user_role, location_uuid, org_member, issue_number, ssp_path, requester, approver, session_id, amb_member):
     """
     Creates a yaml file containing information about a new user
 
@@ -30,6 +31,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         requester (string): String containing username of GitHub user that created account creation request
         approver (string): String containing username of GitHub user that approved account creation request
         session_id (string): String containing session ID
+        amb_member (string): String containing which AMB member
     """
     
     # Structure of yaml file
@@ -45,6 +47,7 @@ def create_user(user_name, user_username, user_email, user_role, location_uuid, 
         "ssp-path": f"{ssp_path}",
         "requester": f"{requester}",
         "approver": f"{approver}",
+        "amb-member": f"{amb_member}",
         },
     }
     
