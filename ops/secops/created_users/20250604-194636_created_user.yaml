@@ -1,0 +1,15 @@
+
+
+command: create-user
+user:
+  amb-member: ''
+  approver: selenaxiao-nist
+  email-address: blossom-admin@nist.gov
+  location-uuid: None
+  member-of-organization: None
+  name: Simmon Admino
+  requester: selenaxiao-nist
+  role: System Administrator
+  ssp-path: .sims/
+  username: simmonadminodelete
+
