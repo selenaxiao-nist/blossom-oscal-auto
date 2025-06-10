@@ -5,3 +5,4 @@ SAP_FILE = ''
 SSP_STATEMENT_ID_PREFIX = 'ac-2_smt.'
 SAP_STATEMENT_ID_PREFIX = 'ac-2.'
 ROLES = ["system-owner", "system-administrator", "sys-sec-assessor"]
+EMAIL_DOMAIN = ''
