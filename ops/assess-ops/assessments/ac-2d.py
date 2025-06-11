@@ -2,14 +2,13 @@
 
 from utils import *
 from pprint import pprint
-from constants import ROLES
 
 print_current_control(__file__)
 
 print("SSP description:\n")
-print(get_ssp_statement_description("d.1") + "\n")
-print("SAP description:\n")
-print(get_sap_task_description("d.1") + "\n")
+print(get_ssp_statement_remarks("d") + "\n")
+# print("SAP description:\n")
+# print(get_sap_task_description("d") + "\n")
 
 expr = f"//aws:Grantee[aws:ID and aws:DisplayName]" # Get Grantee (user) elements that contain ID (UUID) and DisplayName (role). Some Grantee elements aren't users.
 
@@ -39,9 +38,17 @@ pprint(f"{acl_users_dict=}")
 # 1. read ssp responsible parties for users, then check those users exist in ACL (contains only users in the cloud), Cognito, chaincode (acquisition officer, authorizing official, license owner)
 
 # ac-2.d.1 - match users
-expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
+print("SSP description:\n")
+print(get_ssp_statement_description("d.1") + "\n")
+print("SAP description:\n")
+print(get_sap_task_description("d.1") + "\n")
 
 # ac-2.d.2 - match roles
+print("SSP description:\n")
+print(get_ssp_statement_description("d.2") + "\n")
+print("SAP description:\n")
+print(get_sap_task_description("d.2") + "\n")
+
 for role in ROLES:
     expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
     ssp_users = run_ssp_expr(expr)
@@ -58,4 +65,7 @@ for role in ROLES:
     print("Result: " + result)
 
 # ac-2.d.3 - match privileges
-
+print("SSP description:\n")
+print(get_ssp_statement_description("d.3") + "\n")
+print("SAP description:\n")
+print(get_sap_task_description("d.3") + "\n")

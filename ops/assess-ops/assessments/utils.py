@@ -32,6 +32,15 @@ def run_sap_expr(expr: str, node=None):
         node = get_elementtree_root(SAP_FILE)
     return node.xpath(expr, namespaces=NAMESPACES)
 
+def get_ssp_statement_remarks(statement_id: str) -> str:
+    expr_ssp_description = f"//oscal:statement[@statement-id='{SSP_STATEMENT_ID_PREFIX}{statement_id}']/oscal:remarks/*/descendant-or-self::text()"
+    get_ssp_description = run_ssp_expr(expr_ssp_description)
+    ssp_description = ''
+    for i in get_ssp_description:
+        ssp_description += (i + " ")
+    return ssp_description
+
+
 def get_ssp_statement_description(statement_id: str) -> str:
     expr_ssp_description = f"//oscal:statement[@statement-id='{SSP_STATEMENT_ID_PREFIX}{statement_id}']/oscal:by-component/oscal:description/*/descendant-or-self::text()"
     get_ssp_description = run_ssp_expr(expr_ssp_description)
