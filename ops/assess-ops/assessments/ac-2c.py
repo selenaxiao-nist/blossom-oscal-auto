@@ -11,6 +11,7 @@ if len(EMAIL_DOMAIN) == 0:
 
 expr_emails = f"//oscal:party/oscal:email-address/text()"
 
+# get all emails from all parties
 get_emails = run_ssp_expr(expr_emails)
 
 print("SSP description:\n")

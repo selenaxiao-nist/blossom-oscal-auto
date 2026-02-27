@@ -6,6 +6,8 @@ print_current_control(__file__)
 
 # user_type = 'privileged' # privileged or non-privileged
 # expr = f"//oscal:role[oscal:prop[@name='privilege-level' and @value='{user_type}']]/@id"
+
+# xpath expressions to find privileged and non privileged roles
 expr_privileged = f"//oscal:role[oscal:prop[@name='privilege-level' and @value='privileged']]/@id"
 expr_nonprivileged = f"//oscal:role[oscal:prop[@name='privilege-level' and @value='non-privileged']]/@id"
 

@@ -50,6 +50,7 @@ print("SAP description:\n")
 print(get_sap_task_description("d.2") + "\n")
 
 for role in ROLES:
+    # get all users (parties) with role
     expr = f"//oscal:responsible-party[@role-id='{role}']/oscal:party-uuid/text()"
     ssp_users = run_ssp_expr(expr)
     print(role + ": ")
@@ -57,6 +58,7 @@ for role in ROLES:
 
     result = "Pass, " + role + " users in ACL are defined as " + role + " users in SSP" 
     for ssp_system_owner_uuid in ssp_users:
+        # check whether ACL also contains user in this role
         check_acl = acl_users_dict[ssp_system_owner_uuid]
         if check_acl != role:
             print("User " + ssp_system_owner_uuid + " does not match in ACL (" + check_acl + ") and SSP (" + role + ")")
